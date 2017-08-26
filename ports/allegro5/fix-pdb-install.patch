@@ -1,8 +1,22 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 72348fe..a51e50b 100644
+index 72348fe..cb7f59a 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -1010,14 +1010,9 @@ else()
+@@ -1001,7 +1001,12 @@ set(prefix "${CMAKE_INSTALL_PREFIX}")
+ set(INCLUDE_PREFIX "\${prefix}")
+ # XXX these should be configurable separately
+ set(bindir "\${exec_prefix}/bin")
+-set(includedir "\${prefix}/include")
++set(includedir "${CMAKE_INSTALL_PREFIX}/include")
++
++if (CMAKE_BUILD_TYPE STREQUAL "Debug")
++    string(REPLACE "/debug/include" "/include" includedir "${includedir}")
++endif()
++
+ set(libdir "\${exec_prefix}/lib${LIB_SUFFIX}")
+ 
+ if(WANT_MONOLITH)
+@@ -1010,14 +1015,9 @@ else()
      set(PKG_CONFIG_FILES allegro ${ADDON_PKG_CONFIG_FILES})
  endif(WANT_MONOLITH)
  
@@ -19,7 +33,7 @@ index 72348fe..a51e50b 100644
  
  if(INSTALL_PKG_CONFIG_FILES)
      append_lib_type_suffix(lib_type)
-@@ -1034,7 +1029,7 @@ if(INSTALL_PKG_CONFIG_FILES)
+@@ -1034,7 +1034,7 @@ if(INSTALL_PKG_CONFIG_FILES)
              else (SHARED)
                  # For static linking: get extra libraries to link with.
                  get_target_property(link_with ${name} static_link_with)
@@ -61,3 +75,4 @@ index 782196f..f784501 100644
              DESTINATION lib
              CONFIGURATIONS Debug RelWithDebInfo
          )
+
